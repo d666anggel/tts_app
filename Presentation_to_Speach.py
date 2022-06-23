@@ -54,6 +54,7 @@ def main():
                     window["progbar"].update_bar(10)
                     pres_pages = pres_separate(base_filename, values["file_pres"])
                     if scenario_pages != pres_pages:
+                        clean_tmp(base_filename)
                         print("Ошибка! Количество страниц текста и количество страниц в презентации не совпадают, проверьте на ошибки исходные файлы")
                     else:
                         window["progbar"].update_bar(30)
