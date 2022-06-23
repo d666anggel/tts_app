@@ -52,14 +52,20 @@ def scenario_separate(base_filename, file):
     print("# Количество страниц для озвучки: " + str(file_count))
     return int(file_count)
 
-def pres_separate(base_filename, file, resolution=300):
-    all_pages = Image(filename=file, resolution=resolution)
+def pres_separate(base_filename, file, resolution, dpi=300):
+    all_pages = Image(filename=file, resolution=dpi)
     path = "data/tmp/" + base_filename
     for i, page in enumerate(all_pages.sequence):
         file_count = int(i+1)
         with Image(page) as img:
             img.format = "png"
-            img.transform(resize='2560x')
+            # img.transform(resize='2560x1820')
+            if resolution == "16:9":
+                img.resize(2560, 1440)
+            elif resolution == "16:10":
+                img.resize(2560, 1600)
+            else:
+                img.resize(2560, 1820)
             img.background_color = Color("white")
             # img.alpha_channel = "remove"
 

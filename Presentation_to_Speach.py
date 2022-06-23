@@ -9,9 +9,13 @@ def main():
     available_languages = ["Украинский", "Русский"]
     available_threads = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
     available_codecs = ["Другая", "AMD", "NVIDIA"]
+    available_resolution = ["4:3", "16:9", "16:10"]
     sg.theme("Default1")
     layout = [
-        [sg.Text("Язык: "), sg.Combo(available_languages, key="input_lang", default_value="Русский"), sg.Text("Кол-во потоков: "), sg.Combo(available_threads, key="input_thread", default_value="2"), sg.Text("Видеокарта: "), sg.Combo(available_codecs, key="input_codec", default_value="Другая")],
+        [sg.Text("Язык: "), sg.Combo(available_languages, key="input_lang", default_value="Русский"),
+         sg.Text("Кол-во потоков: "), sg.Combo(available_threads, key="input_thread", default_value="2"),
+         sg.Text("Видеокарта: "), sg.Combo(available_codecs, key="input_codec", default_value="Другая"),
+         sg.Text("Соотношение сторон: "), sg.Combo(available_resolution, key="input_resolution", default_value="4:3")],
         [sg.Text("Файл сценария (.txt): ")],
         [sg.InputText(key="file_scenario"), sg.FileBrowse("Выбрать", file_types=(("Текстовый", "*.txt"),))],
         [sg.Text("Файл презентации (.pdf): ")],
@@ -39,7 +43,7 @@ def main():
         elif event == "Перевести":
             window["progbar"].update_bar(0)
             window["status"].update("")
-            if os.path.isfile(values["file_scenario"]) and os.path.isfile(values["file_pres"]) and os.path.isdir(values["dir_out"]) and values["input_lang"] != "" and values["input_codec"] != "" and type(values["input_thread"]) == int:
+            if os.path.isfile(values["file_scenario"]) and os.path.isfile(values["file_pres"]) and os.path.isdir(values["dir_out"]) and values["input_lang"] != "" and values["input_codec"] != "" and values["input_resolution"] != "" and type(values["input_thread"]) == int:
                 scenario_name, scenario_extension = os.path.splitext(values["file_scenario"])
                 pres_name, pres_extension = os.path.splitext(values["file_pres"])
                 if scenario_extension == ".txt" and pres_extension == ".pdf":
@@ -52,7 +56,7 @@ def main():
                     base_filename = lang + "_" + time.strftime("%Y%m%d_%H%M%S")
                     scenario_pages = scenario_separate(base_filename, values["file_scenario"])
                     window["progbar"].update_bar(10)
-                    pres_pages = pres_separate(base_filename, values["file_pres"])
+                    pres_pages = pres_separate(base_filename, values["file_pres"], values["input_resolution"])
                     if scenario_pages != pres_pages:
                         clean_tmp(base_filename)
                         print("Ошибка! Количество страниц текста и количество страниц в презентации не совпадают, проверьте на ошибки исходные файлы")
