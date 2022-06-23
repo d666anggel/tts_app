@@ -5,7 +5,7 @@ import xml.etree.ElementTree as ET
 num_files = len(glob.glob("notesSlides/*.xml"))
 filename = "notesSlides/Theme1(" + str(num_files) + " pages).txt"
 file_obj = open(filename, "w", encoding="windows-1251")
-for i in range(1,num_files):
+for i in range(1,num_files+1):
     tree = ET.parse('./notesSlides/notesSlide' + str(i) +'.xml')
     root = tree.getroot()
     file_obj.write('===== PAGE =====' + '\n')
